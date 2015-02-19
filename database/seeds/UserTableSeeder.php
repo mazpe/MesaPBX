@@ -15,12 +15,11 @@ class UserTableSeeder extends Seeder
                 "email"         => "lesterm@gmail.com",
             ],
             [
-                "name"          => "Lester Mesa",
-                "username"      => "lester",
+                "name"          => "Juan Diaz",
+                "username"      => "juan",
                 "password"      => Hash::make('password'),
-                "email"         => "lesterm@gmail.com",
+                "email"         => "juand@gmail.com",
             ],
-
         ];
 
         foreach ($users as $user) {

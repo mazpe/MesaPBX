@@ -2,10 +2,11 @@
 use Illuminate\Database\Seeder;
 use App\ServiceAdvisor;
 
-class ServiceAdvisorTableSeeder extends DatabaseSeeder
+class ServiceAdvisorTableSeeder extends Seeder
 {
     public function run()
     {
+        DB::table('service_advisors')->delete();
         $serviceadvivors = [
             [
                 "name"              => "Fernando Gonzales",
