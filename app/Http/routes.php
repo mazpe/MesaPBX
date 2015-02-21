@@ -1,5 +1,6 @@
 <?php
 
+use App\User;
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -11,11 +12,21 @@
 |
 */
 
-Route::get('/', 'WelcomeController@index');
+Route::get('/', function() {
+    return View::make('singlepage');
+});
 
 Route::get('home', 'HomeController@index');
+
+Route::resource('users','UserController');
+Route::resource('serviceadvisors','ServiceAdvisorController');
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
 ]);
+
+Route::get('/request-json-model', function(){
+    //if 'User' is an eloquent model, this route should returns json response
+    return User::all();
+});

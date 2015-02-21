@@ -1,0 +1,20 @@
+.container2 {
+    position: relative;
+    background-color: white;
+    width: 80%;
+}
+
+.container {
+    margin: auto;
+    position: absolute;
+    top: 1%; left: 5%; bottom: 5%; right: 5%;
+
+}
+
+.content {
+    margin: auto;
+    position: relative;
+    background-color: white;
+    top: 1%; left: 5%; bottom: 5%; right: 5%;
+
+}
