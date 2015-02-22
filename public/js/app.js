@@ -23,6 +23,16 @@ app.config(function($routeProvider) {
     $routeProvider.otherwise( { redirectTo: '/login' });
 });
 
+app.run(function($rootScope, $location, AuthenticationService) {
+    var routesThatRequireAuth = ['/home'];
+    $rootScope.$on('$routeChangeStart', function(event, next, current) {
+        // underscore .contains
+        if (_(routesThatRequireAuth).contains($location.path()) && !AuthenticationService.isLoggedIn()) {
+            $location.path('/login');
+        }
+    });
+});
+
 app.factory("UserService", function($http) {
     return {
         get: function() {
@@ -31,21 +41,48 @@ app.factory("UserService", function($http) {
     };
 });
 
-app.factory("AuthenticationService", function($http, $location) {
+app.factory("SessionService", function() {
+    return {
+        get: function(key) {
+            sessionStorage.getItem(key);
+        },
+        set: function(key,val) {
+            sessionStorage.setItem(key,val);
+        },
+        unset: function(key) {
+            sessionStorage.removeItem(key);
+        }
+    };
+});
+
+app.factory("AuthenticationService", function($http, $location, SessionService) {
+    var cacheSession = function() {
+        SessionService.set('authenticated', true);
+    };
+    var uncacheSession = function() {
+        SessionService.unset('authenticated');
+    };
     return {
         login: function(credentials) {
-            return $http.post("/auth/login", credentials);
+            var login = $http.post("/login", credentials);
+            login.success(cacheSession);
         },
         logout: function() {
-            return $http.get("/auth/logout");
+            var logout = $http.get("/logout");
+            logout.success(uncacheSession);
+        },
+        isLoggedIn: function() {
+            return SessionService.get('authenticated');
         }
     }
 });
 
-app.controller("LoginController", function($scope, AuthenticationService) {
-    $scope.credentials = { username: "", password: ""};
+app.controller("LoginController", function($scope, $location, AuthenticationService) {
+    $scope.credentials = { email: "", password: ""};
     $scope.login = function() {
-        AuthenticationService.login($scope.credentials);
+        AuthenticationService.login($scope.credentials).success(function() {
+            $location.path('/home');
+        });
     };
 });
 

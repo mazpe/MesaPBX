@@ -16,6 +16,9 @@ Route::get('/', function() {
     return View::make('singlepage');
 });
 
+Route::post('/login', 'AuthController@login');
+Route::get('/logout', 'AuthController@logout');
+
 Route::get('home', 'HomeController@index');
 
 Route::resource('users','UserController');
