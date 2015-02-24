@@ -10,7 +10,8 @@
     <script src="/js/jquery-1.11.2.min.js"></script>
     <script src="/js/underscore-min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
-    <script src="/js/angular.min.js"></script>
+    <script src="/js/bower_components/angular/angular.min.js"></script>
+    <script src="/js/bower_components/angular-smart-table/dist/smart-table.min.js"></script>
     <script src="/js/angular-route.min.js"></script>
     <script src="/js/app.js"></script>
     <script src="/js/misc.js"></script>

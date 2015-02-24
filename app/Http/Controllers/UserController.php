@@ -20,6 +20,7 @@ class UserController extends Controller {
         return view('users.index', ['users' => $users]);
 	}
 
+    publ
 	/**
 	 * Show the form for creating a new resource.
 	 *
