@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\ServiceAdvisor;
 use Illuminate\Http\Request;
 
-class ServiceAdvisorsController extends Controller {
+class ExtensionController extends Controller {
 
 	/**
 	 * Display a listing of the resource.
@@ -16,15 +16,16 @@ class ServiceAdvisorsController extends Controller {
 	public function index()
 	{
 		//
-        $serviceadvisors = ServiceAdvisor::all();
-        return view('serviceadvisors.index', ['serviceadvisors' => $serviceadvisors]);
+        //$extensions = Extension::all();
+        //return view('extensions.index', ['extensions' => $extensions]);
 	}
-    public function getServiceAdvivors()
-    {
-        $serviceadvisors = ServiceAdvisor::all();
-        return response()->json($serviceadvisors);
-    }
 
+    public function getExtensions()
+    {
+        // change to extensions
+        $extensions = ServiceAdvisor::all();
+        return response()->json($extensions);
+    }
 	/**
 	 * Show the form for creating a new resource.
 	 *
@@ -54,7 +55,7 @@ class ServiceAdvisorsController extends Controller {
 	public function show($id)
 	{
 		//
-        return view('serviceadvisors.show', ['serviceadvisor' => ServiceAdvisor::findOrFail($id)]);
+        return view('extensions.show', ['extension' => Extension::findOrFail($id)]);
 	}
 
 	/**

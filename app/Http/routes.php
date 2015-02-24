@@ -32,6 +32,7 @@ Route::resource('users','UserController');
 Route::get('getExtensions', 'ExtensionController@getExtensions');
 Route::resource('extensions','ExtensionController');
 
+Route::get('getServiceAdvisors', 'ServiceAdvisorController@getServiceAdvisors');
 Route::resource('serviceadvisors','ServiceAdvisorController');
 
 Route::controllers([

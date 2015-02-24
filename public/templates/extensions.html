@@ -1,8 +1,35 @@
 <!-- Main component for a primary marketing message or call to action -->
 <div class="jumbotron">
     <h1>Extensions</h1>
-    <p>This example is a quick exercise to illustrate how the default, static navbar and fixed to top navbar work. It includes the responsive CSS and HTML, so it also adapts to your viewport and device.</p>
+    <p>Display extensions in the system</p>
     <p>
-        <a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button">View navbar docs &raquo;</a>
+        <a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button">Create an Extension &raquo;</a>
     </p>
+    <table st-table="rowCollection" class="table table-striped">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Extension</th>
+            <th>Pushbullet</th>
+            <th>Created</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="row in rowCollection">
+            <td>{{row.name}}</td>
+            <td>{{row.email}}</td>
+            <td>{{row.extension}}</td>
+            <td>{{row.pushbullet_token}}</td>
+            <td>{{row.created_at}}</td>
+        </tr>
+        </tbody>
+    </table>
 </div>
+
+<div class="row">
+    <div class="large-12 columns">
+        <button class="button large expand radius" ng-click="logout()">Log Out</button>
+    </div>
+</div>
+
