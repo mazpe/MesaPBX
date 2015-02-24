@@ -18,12 +18,23 @@ app.config(function($routeProvider) {
 
     $routeProvider.when('/users', {
         templateUrl: 'templates/users.html',
-        controller: 'UsersController'
+        controller: 'UsersController',
+        resolve: {
+            "expiry" : function ($http) {
+                return $http.get('/expiry');
+            }
+        }
     });
 
     $routeProvider.when('/extensions', {
         templateUrl: 'templates/extensions.html',
-        controller: 'ExtensionsController'
+        controller: 'ExtensionsController',
+        resolve: {
+            "expiry" : function ($http) {
+                return $http.get('/expiry');
+            }
+        }
+
     });
 
     $routeProvider.otherwise( { redirectTo: '/login' });
@@ -55,21 +66,13 @@ app.config(function($httpProvider) {
 });
 
 app.run(function($rootScope, $location, AuthenticationService) {
-    var routesThatRequireAuth = ['/home'];
+    var routesThatRequireAuth = ['/home','/users'];
     $rootScope.$on('$routeChangeStart', function(event, next, current) {
         // underscore .contains
         if (_(routesThatRequireAuth).contains($location.path()) && !AuthenticationService.isLoggedIn()) {
             $location.path('/login');
         }
     });
-});
-
-app.factory("UserService", function($http) {
-    return {
-        get: function() {
-            return $http.get('/get-users');
-        }
-    };
 });
 
 app.factory("FlashService", function($rootScope) {
@@ -82,6 +85,7 @@ app.factory("FlashService", function($rootScope) {
         }
     }
 });
+
 app.factory("SessionService", function() {
     return {
         get: function(key) {
@@ -147,13 +151,32 @@ app.controller("HomeController", function($scope, $location, AuthenticationServi
         });
     };
 
-    $scope.rowCollection = [
-        {firstName: 'Laurent', lastName: 'Renard', birthDate: new Date('1987-05-21'), balance: 102, email: 'whatever@gmail.com'},
-        {firstName: 'Blandine', lastName: 'Faivre', birthDate: new Date('1987-04-25'), balance: -2323.22, email: 'oufblandou@gmail.com'},
-        {firstName: 'Francoise', lastName: 'Frere', birthDate: new Date('1955-08-27'), balance: 42343, email: 'raymondef@gmail.com'}
-    ];
 });
 
-app.controller("UsersController", function() {});
+app.controller("UsersController", function($http, $scope, $location, AuthenticationService, expiry) {
+    $scope.title = "Users";
+    $scope.message = "This is a message";
 
-app.controller("ExtensionsController", function() {});
+    $scope.logout = function() {
+        AuthenticationService.logout().success(function() {
+            $location.path('/login');
+        });
+    };
+
+    // get my users
+    $http.get("/getUsers").success(function(response) {$scope.rowCollection = response;});
+});
+
+app.controller("ExtensionsController", function($http, $scope, $location, AuthenticationService, expiry) {
+    $scope.title = "Extensions";
+    $scope.message = "This is a message";
+
+    $scope.logout = function() {
+        AuthenticationService.logout().success(function() {
+            $location.path('/login');
+        });
+    };
+
+    // get my users
+    $http.get("/getExtensions").success(function(response) {$scope.rowCollection = response;});
+});

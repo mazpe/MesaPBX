@@ -26,7 +26,12 @@ Route::get('/expiry', function(){
 });
 Route::get('home', 'HomeController@index');
 
+Route::get('getUsers', 'UserController@getUsers');
 Route::resource('users','UserController');
+
+Route::get('getExtensions', 'ExtensionController@getExtensions');
+Route::resource('extensions','ExtensionController');
+
 Route::resource('serviceadvisors','ServiceAdvisorController');
 
 Route::controllers([

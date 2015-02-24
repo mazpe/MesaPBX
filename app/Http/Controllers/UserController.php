@@ -20,7 +20,11 @@ class UserController extends Controller {
         return view('users.index', ['users' => $users]);
 	}
 
-    publ
+    public function getUsers()
+    {
+        $users = User::all();
+        return response()->json($users);
+    }
 	/**
 	 * Show the form for creating a new resource.
 	 *
