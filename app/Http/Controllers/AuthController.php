@@ -19,7 +19,7 @@ class AuthController extends Controller {
 
     public function logout() {
         Auth::logout();
-        return response()->jason(array('flash' => 'Logged out'));
+        return response()->json(array('flash' => 'Logged out'));
     }
 
 }

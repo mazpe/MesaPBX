@@ -1,4 +1,5 @@
 var app = angular.module('app', ['ngRoute']);
+
 app.config(function($routeProvider) {
     $routeProvider.when('/login', {
         templateUrl: 'templates/login.html',
@@ -7,7 +8,12 @@ app.config(function($routeProvider) {
 
     $routeProvider.when('/home', {
        templateUrl: 'templates/home.html',
-        controller: 'HomeController'
+        controller: 'HomeController',
+        resolve: {
+            "expiry" : function ($http) {
+                return $http.get('/expiry');
+            }
+        }
     });
 
     $routeProvider.when('/users', {
@@ -21,6 +27,31 @@ app.config(function($routeProvider) {
     });
 
     $routeProvider.otherwise( { redirectTo: '/login' });
+});
+
+// handle session timing out on the server side
+app.config(function($httpProvider) {
+
+    var logsOutUserOn401 = function($location, $q, SessionService, FlashService) {
+        var success = function(response) {
+            return response;
+        };
+
+        var error = function(response) {
+            if(response.status === 401) {
+                SessionService.unset('authenticated');
+                $location.path('/login');
+                FlashService.show(response.data.flash);
+            }
+            return $q.reject(response);
+        };
+
+        return function(promise) {
+            return promise.then(success, error);
+        };
+    };
+
+    $httpProvider.interceptors.push(logsOutUserOn401);
 });
 
 app.run(function($rootScope, $location, AuthenticationService) {
@@ -41,10 +72,20 @@ app.factory("UserService", function($http) {
     };
 });
 
+app.factory("FlashService", function($rootScope) {
+    return {
+        show: function(message) {
+            $rootScope.flash = message;
+        },
+        clear: function() {
+            $rootScope.flash = "";
+        }
+    }
+});
 app.factory("SessionService", function() {
     return {
         get: function(key) {
-            sessionStorage.getItem(key);
+            return sessionStorage.getItem(key);
         },
         set: function(key,val) {
             sessionStorage.setItem(key,val);
@@ -55,21 +96,31 @@ app.factory("SessionService", function() {
     };
 });
 
-app.factory("AuthenticationService", function($http, $location, SessionService) {
+app.factory("AuthenticationService", function($http, $location, SessionService, FlashService) {
     var cacheSession = function() {
         SessionService.set('authenticated', true);
     };
     var uncacheSession = function() {
         SessionService.unset('authenticated');
     };
+
+    var loginError = function(response) {
+        FlashService.show(response.flash);
+    };
+
     return {
         login: function(credentials) {
             var login = $http.post("/login", credentials);
+            //console.log('before cacheSession');
             login.success(cacheSession);
+            login.success(FlashService.clear);
+            login.error(loginError);
+            return login;
         },
         logout: function() {
             var logout = $http.get("/logout");
             logout.success(uncacheSession);
+            return logout;
         },
         isLoggedIn: function() {
             return SessionService.get('authenticated');
@@ -86,15 +137,17 @@ app.controller("LoginController", function($scope, $location, AuthenticationServ
     };
 });
 
-app.controller("HomeController", function($scope) {
+app.controller("HomeController", function($scope, $location, AuthenticationService, expiry) {
     $scope.title = "Home";
     $scope.message = "This is a message";
+
+    $scope.logout = function() {
+        AuthenticationService.logout().success(function() {
+            $location.path('/login');
+        });
+    };
 });
 
-app.controller("UsersController", function() {
+app.controller("UsersController", function() {});
 
-});
-
-app.controller("ExtensionsController", function() {
-
-});
+app.controller("ExtensionsController", function() {});

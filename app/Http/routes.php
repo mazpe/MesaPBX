@@ -1,6 +1,8 @@
 <?php
 
 use App\User;
+use Illuminate\Http\Response;
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -18,7 +20,10 @@ Route::get('/', function() {
 
 Route::post('/login', 'AuthController@login');
 Route::get('/logout', 'AuthController@logout');
-
+Route::get('/expiry', function(){
+    Return response()->json(array('flash' => 'all is good!'));
+    //Return response()->json(array('flash' => 'Your session has expired!'),401);
+});
 Route::get('home', 'HomeController@index');
 
 Route::resource('users','UserController');

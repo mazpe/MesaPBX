@@ -1,13 +1,34 @@
     <!-- Main component for a primary marketing message or call to action -->
-    <div class="alert alert-warning">
-        <a href="#" class="close" data-dismiss="alert">&times;</a>
-        <strong>Warning!</strong> {{ message }}
-    </div>
-
     <div class="jumbotron">
         <h1>{{ title }}</h1>
         <p>This example is a quick exercise to illustrate how the default, static navbar and fixed to top navbar work. It includes the responsive CSS and HTML, so it also adapts to your viewport and device.</p>
         <p>
             <a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button">View navbar docs &raquo;</a>
         </p>
+        <table st-table="rowCollection" class="table table-striped">
+            <thead>
+            <tr>
+                <th>first name</th>
+                <th>last name</th>
+                <th>birth date</th>
+                <th>balance</th>
+                <th>email</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="row in rowCollection">
+                <td>{{row.firstName}}</td>
+                <td>{{row.lastName}}</td>
+                <td>{{row.birthDate}}</td>
+                <td>{{row.balance}}</td>
+                <td>{{row.email}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row">
+        <div class="large-12 columns">
+            <button class="button large expand radius" ng-click="logout()">Log Out</button>
+        </div>
     </div>
